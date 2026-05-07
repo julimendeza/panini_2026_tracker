@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panini FIFA World Cup 2026 – Sticker Tracker</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(150deg,#061c0c 0%,#0e3a1e 22%,#1a5c30 46%,#0c4020 68%,#071a0c 100%);background-attachment:fixed;color:#ddf4e8;padding:20px;min-height:100vh}
+h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,.5);margin-bottom:4px}
+#tagline{text-align:center;font-size:.82rem;color:#7aaa8a;margin-bottom:8px;letter-spacing:.04em}
+#summary{text-align:center;font-size:.92rem;color:#9ecfb0;margin-bottom:6px}
+#total-bar-wrap{max-width:600px;margin:0 auto 6px;background:#0a2c14;border-radius:8px;height:10px;overflow:hidden}
+#total-bar{height:100%;background:linear-gradient(90deg,#ffd700,#ff8c00);border-radius:8px;transition:width .3s}
+#legend{text-align:center;font-size:.75rem;color:#4a8060;margin-bottom:18px}
+#legend span{margin:0 8px}
+
+.lang-bar{text-align:center;margin-bottom:14px}
+.lang-btn{background:#1e5c30;color:#c8ecd8;border:1px solid #2d7040;padding:5px 14px;border-radius:20px;cursor:pointer;margin:0 3px;font-size:.82rem;transition:all .2s}
+.lang-btn:hover,.lang-btn.active{background:#ffd700;color:#0c3520;border-color:#ffd700;font-weight:bold}
+
+.filter-bar{text-align:center;margin-bottom:20px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
+.filter-bar button{background:#1e5c30;color:#c8ecd8;border:1px solid #2d7040;padding:6px 16px;border-radius:20px;cursor:pointer;font-size:.82rem;transition:all .2s}
+.filter-bar button:hover,.filter-bar button.active{background:#ffd700;color:#0c3520;border-color:#ffd700;font-weight:bold}
+.btn-export{background:#1a5e20!important;color:#fff!important;border-color:#2a8030!important}
+.btn-export:hover{background:#1f7025!important}
+.btn-reset{background:#8b0000!important;color:#fff!important;border-color:#8b0000!important}
+.btn-reset:hover{background:#a00!important}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;max-width:1400px;margin:0 auto}
+.team-card{background:#1e5c30;border:1px solid #2d7040;border-radius:12px;overflow:hidden;transition:box-shadow .2s}
+.team-card:hover{box-shadow:0 4px 22px rgba(0,220,80,.25)}
+.team-complete:hover{box-shadow:0 4px 22px rgba(212,175,55,.5)!important}
+.intro-card,.coke-card{grid-column:1/-1}
+.intro-card .team-header{background:#ccd8d0;border-bottom-color:#a0b4a8}
+.intro-card .team-name{color:#0a3020}
+.intro-card:hover{box-shadow:0 4px 22px rgba(80,200,140,.3)!important}
+.coke-card .team-header{background:linear-gradient(135deg,#8b0000 0%,#cc0000 45%,#8b0000 100%);border-bottom-color:#cc0000}
+.coke-card .team-name{color:#fff;font-weight:800}
+.coke-card .team-count{color:rgba(255,255,255,.85)}
+.coke-card .team-progress-fill{background:linear-gradient(90deg,#cc0000,#f33)}
+.coke-card:hover{box-shadow:0 4px 22px rgba(204,0,0,.4)!important}
+
+.team-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#ccd4cc;border-bottom:1px solid #a8b8a8}
+.team-name{font-weight:700;font-size:.93rem;color:#111;display:flex;align-items:center;gap:6px}
+.team-count{font-size:.75rem;color:#333;white-space:nowrap;text-align:right;line-height:1.5}
+.count-owned{color:#4cdd80}
+.count-dup{color:#ffd700}
+.count-miss{color:#5a8870}
+.team-progress{height:4px;background:#b8c8b8}
+.team-progress-fill{height:100%;background:linear-gradient(90deg,#00c853,#64dd17);transition:width .3s}
+
+@keyframes gold-shimmer{0%{box-shadow:0 0 8px 3px rgba(212,175,55,.45)}50%{box-shadow:0 0 14px 5px rgba(212,175,55,.65)}100%{box-shadow:0 0 8px 3px rgba(212,175,55,.45)}}
+.team-complete .team-header{background:linear-gradient(135deg,#b8860b 0%,#d4af37 45%,#c8960c 100%);animation:gold-shimmer 5s ease-in-out infinite;border-bottom-color:#d4af37}
+.team-complete .team-name{color:#0a1e08;font-weight:800}
+.team-complete .team-count{color:#0a1e08}
+
+.stickers{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;padding:10px}
+
+.sticker-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:4px 2px;border-radius:6px;transition:background .15s;user-select:none}
+.sticker-item:hover{background:#164a24}
+.sticker-box{width:24px;height:24px;border-radius:5px;border:2px solid #1e4a2e;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;background:#2a7040;transition:border-color .15s,box-shadow .15s}
+.sticker-num{font-size:.62rem;color:#4a8060;margin-top:2px;transition:color .15s}
+
+.sticker-item.s1 .sticker-box{background:#00c853;border-color:#00e676;box-shadow:0 0 8px rgba(0,230,100,.45);color:#fff}
+.sticker-item.s1 .sticker-box::after{content:'✓'}
+.sticker-item.s1 .sticker-num{color:#4cdd80;font-weight:bold}
+
+.sticker-item.s2 .sticker-box{background:#c8960c;border-color:#d4af37;box-shadow:0 0 8px rgba(212,175,55,.5);color:#fff}
+.sticker-item.s2 .sticker-box::after{content:'★'}
+.sticker-item.s2 .sticker-num{color:#ffd700;font-weight:bold}
+
+@keyframes foil-sweep{0%{background-position:220% center}100%{background-position:-220% center}}
+.foil-sticker.s0 .sticker-box{
+  background:linear-gradient(110deg,#1e5030 20%,#347850 38%,#78d8a0 50%,#347850 62%,#1e5030 80%);
+  background-size:300% auto;border-color:#2a7050;animation:foil-sweep 4s linear infinite}
+.foil-sticker.s1 .sticker-box{
+  background:linear-gradient(110deg,#5a6878 15%,#9ab4c8 38%,#dceaf6 50%,#9ab4c8 62%,#5a6878 85%)!important;
+  background-size:300% auto!important;border-color:#88a8c4!important;
+  box-shadow:0 0 10px rgba(136,168,200,.55)!important;animation:foil-sweep 4s linear infinite;color:#0a1628!important}
+.foil-sticker.s2 .sticker-box{
+  background:linear-gradient(110deg,#5a4000 15%,#a07800 38%,#ffd700 50%,#a07800 62%,#5a4000 85%)!important;
+  background-size:300% auto!important;border-color:#d4af37!important;
+  box-shadow:0 0 10px rgba(212,175,55,.6)!important;animation:foil-sweep 4s linear infinite;color:#0a1628!important}
+.foil-sticker.s1 .sticker-num{color:#88a8c4;font-weight:bold}
+.foil-sticker.s2 .sticker-num{color:#ffd700;font-weight:bold}
+
+.coke-sticker.s0 .sticker-box{border-color:#8b2020;background:#3a1010}
+.coke-sticker.s1 .sticker-box{background:#e61c23;border-color:#e61c23;box-shadow:0 0 10px rgba(230,28,35,.55);color:#fff}
+.coke-sticker.s2 .sticker-box{background:#a01015;border-color:#e61c23;box-shadow:0 0 10px rgba(230,28,35,.4);color:#fff}
+.coke-sticker.s1 .sticker-num,.coke-sticker.s2 .sticker-num{color:#e61c23;font-weight:bold}
+
+.faq-wrap{max-width:700px;margin:0 auto 24px}
+.faq-toggle{display:block;width:100%;background:#1e5c30;color:#ffd700;border:1px solid #2d7040;border-radius:8px;padding:8px 16px;font-size:.88rem;cursor:pointer;text-align:center;letter-spacing:.03em}
+.faq-toggle:hover{background:#236835}
+.faq-body{display:none;background:#0e3018;border:1px solid #2a6038;border-top:none;border-radius:0 0 8px 8px;padding:16px 20px}
+.faq-body.open{display:block}
+.faq-body h3{color:#ffd700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;margin:14px 0 4px}
+.faq-body h3:first-child{margin-top:0}
+.faq-body p{font-size:.85rem;color:#8ec8a8;line-height:1.55}
+.faq-body p .key{background:#1a4a2a;border:1px solid #2a6040;border-radius:4px;padding:1px 6px;font-size:.8rem;color:#ddf4e8;white-space:nowrap}
+.note{text-align:center;font-size:.75rem;color:#3a6050;margin-top:24px;font-style:italic}
+@media print{body{background:#fff;color:#000;padding:10px}h1{color:#003087;text-shadow:none}.filter-bar,.faq-wrap,.lang-bar{display:none}.team-card{border:1px solid #ccc;break-inside:avoid;background:#fff}.team-header{background:#003087!important;animation:none!important}.team-name,.team-count{color:#fff!important}.sticker-box{border-color:#999;background:#fff;animation:none!important}.sticker-item.s1 .sticker-box{background:#003087;border-color:#003087;color:#fff}.sticker-item.s2 .sticker-box{background:#b8860b;border-color:#b8860b;color:#fff}#total-bar-wrap{background:#ddd}.intro-card,.coke-card{grid-column:auto}}
+</style>
+</head>
+<body>
+
+<h1 id="h1">⚽ Panini Copa del Mundo FIFA 2026</h1>
+<p id="tagline">Rastreador de Figuritas</p>
+<div id="summary">Cargando...</div>
+<div id="total-bar-wrap"><div id="total-bar" style="width:0%"></div></div>
+<p id="legend"><span id="leg-owned" style="color:#00c853">■ Tengo ✓</span><span id="leg-dup" style="color:#d4af37">■ Repetida ★</span><span id="leg-miss" style="color:#4a5a70">■ Me falta</span><span id="leg-tap" style="color:#556">— toca para cambiar estado</span></p>
+
+<div class="lang-bar">
+  <button class="lang-btn active" id="btn-es" onclick="setLang('es')">🇪🇸 Español</button>
+  <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 English</button>
+</div>
+
+<div class="faq-wrap">
+  <button class="faq-toggle" id="faq-toggle" onclick="this.nextElementSibling.classList.toggle('open')">ⓘ Cómo usar este rastreador ▾</button>
+  <div class="faq-body" id="faq-body">
+    <h3 id="fq1">¿Qué es esto?</h3>
+    <p id="fa1">Rastreador para el álbum oficial Panini Copa del Mundo FIFA 2026. 48 equipos (figuritas 1–20) + 20 figuritas foil FWC de introducción + 14 figuritas bonus Coca‑Cola = <strong>994 figuritas en total</strong>. Marca lo que tienes.</p>
+    <h3 id="fq2">¿Cómo marco una figurita?</h3>
+    <p id="fa2">Toca cualquier casilla para ciclar entre los tres estados: <span class="key">vacía</span> → <span class="key" style="color:#00c853">✓ tengo</span> → <span class="key" style="color:#d4af37">★ repetida</span> → <span class="key">vacía</span>. Se guarda automáticamente.</p>
+    <h3 id="fq3">¿Qué son las figuritas brillantes (foil)?</h3>
+    <p id="fa3">Son figuritas foil. El escudo de cada equipo (figurita 1) y las 20 figuritas FWC de introducción son foil. El efecto cambia de color según el estado.</p>
+    <h3 id="fq4">¿Se guarda el progreso?</h3>
+    <p id="fa4">Sí — guardado automáticamente en <strong>localStorage</strong> del navegador en este dispositivo.</p>
+    <h3 id="fq5">¿Cómo paso mi progreso a otro dispositivo?</h3>
+    <p id="fa5">Haz clic en <span class="key">↓ Exportar progreso</span>. Se descarga un nuevo archivo HTML con todos tus datos ya incluidos.</p>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button id="fb-all" class="active" onclick="filterTeams('all',this)">Todos los equipos</button>
+  <button id="fb-inc" onclick="filterTeams('incomplete',this)">Incompletos</button>
+  <button id="fb-comp" onclick="filterTeams('complete',this)">Completos</button>
+  <button id="fb-none" onclick="filterTeams('none',this)">Sin empezar</button>
+  <button class="btn-export" id="fb-exp" onclick="exportProgress()">↓ Exportar progreso</button>
+  <button class="btn-reset" id="fb-rst" onclick="resetAll()">Reiniciar todo</button>
+</div>
+
+<div class="grid" id="grid"></div>
+<p class="note" id="fnote">* El listado de equipos sigue el álbum oficial Panini. Los números de figurita son relativos a cada sección (1–20 por equipo).</p>
+
+<script>
+const DATA_VERSION = 1;
+const STORAGE_KEY = 'wc2026v2';
+
+// __INTRO_STATE_START__
+const INTRO_OWNED = {};
+// __INTRO_STATE_END__
+
+// __COKE_STATE_START__
+const COKE_OWNED = {};
+// __COKE_STATE_END__
+
+// __TEAMS_START__
+const TEAMS = [
+  {id:"mexico",en:"Mexico",es:"México",flag:"🇲🇽",owned:[]},
+  {id:"south_africa",en:"South Africa",es:"Sudáfrica",flag:"🇿🇦",owned:[]},
+  {id:"south_korea",en:"South Korea",es:"Corea del Sur",flag:"🇰🇷",owned:[]},
+  {id:"czechia",en:"Czechia",es:"Chequia",flag:"🇨🇿",owned:[]},
+  {id:"canada",en:"Canada",es:"Canadá",flag:"🇨🇦",owned:[]},
+  {id:"bosnia",en:"Bosnia and Herzegovina",es:"Bosnia y Herzegovina",flag:"🇧🇦",owned:[]},
+  {id:"qatar",en:"Qatar",es:"Catar",flag:"🇶🇦",owned:[]},
+  {id:"switzerland",en:"Switzerland",es:"Suiza",flag:"🇨🇭",owned:[]},
+  {id:"brazil",en:"Brazil",es:"Brasil",flag:"🇧🇷",owned:[]},
+  {id:"morocco",en:"Morocco",es:"Marruecos",flag:"🇲🇦",owned:[]},
+  {id:"haiti",en:"Haiti",es:"Haití",flag:"🇭🇹",owned:[]},
+  {id:"scotland",en:"Scotland",es:"Escocia",flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",owned:[]},
+  {id:"usa",en:"USA",es:"Estados Unidos",flag:"🇺🇸",owned:[]},
+  {id:"paraguay",en:"Paraguay",es:"Paraguay",flag:"🇵🇾",owned:[]},
+  {id:"australia",en:"Australia",es:"Australia",flag:"🇦🇺",owned:[]},
+  {id:"turkiye",en:"Türkiye",es:"Turquía",flag:"🇹🇷",owned:[]},
+  {id:"germany",en:"Germany",es:"Alemania",flag:"🇩🇪",owned:[]},
+  {id:"curacao",en:"Curaçao",es:"Curazao",flag:"🇨🇼",owned:[]},
+  {id:"ivory_coast",en:"Ivory Coast",es:"Costa de Marfil",flag:"🇨🇮",owned:[]},
+  {id:"ecuador",en:"Ecuador",es:"Ecuador",flag:"🇪🇨",owned:[]},
+  {id:"netherlands",en:"Netherlands",es:"Países Bajos",flag:"🇳🇱",owned:[]},
+  {id:"japan",en:"Japan",es:"Japón",flag:"🇯🇵",owned:[]},
+  {id:"sweden",en:"Sweden",es:"Suecia",flag:"🇸🇪",owned:[]},
+  {id:"tunisia",en:"Tunisia",es:"Túnez",flag:"🇹🇳",owned:[]},
+  {id:"belgium",en:"Belgium",es:"Bélgica",flag:"🇧🇪",owned:[]},
+  {id:"egypt",en:"Egypt",es:"Egipto",flag:"🇪🇬",owned:[]},
+  {id:"iran",en:"Iran",es:"Irán",flag:"🇮🇷",owned:[]},
+  {id:"new_zealand",en:"New Zealand",es:"Nueva Zelanda",flag:"🇳🇿",owned:[]},
+  {id:"spain",en:"Spain",es:"España",flag:"🇪🇸",owned:[]},
+  {id:"cape_verde",en:"Cape Verde",es:"Cabo Verde",flag:"🇨🇻",owned:[]},
+  {id:"saudi_arabia",en:"Saudi Arabia",es:"Arabia Saudita",flag:"🇸🇦",owned:[]},
+  {id:"uruguay",en:"Uruguay",es:"Uruguay",flag:"🇺🇾",owned:[]},
+  {id:"france",en:"France",es:"Francia",flag:"🇫🇷",owned:[]},
+  {id:"senegal",en:"Senegal",es:"Senegal",flag:"🇸🇳",owned:[]},
+  {id:"iraq",en:"Iraq",es:"Irak",flag:"🇮🇶",owned:[]},
+  {id:"norway",en:"Norway",es:"Noruega",flag:"🇳🇴",owned:[]},
+  {id:"argentina",en:"Argentina",es:"Argentina",flag:"🇦🇷",owned:[]},
+  {id:"algeria",en:"Algeria",es:"Argelia",flag:"🇩🇿",owned:[]},
+  {id:"austria",en:"Austria",es:"Austria",flag:"🇦🇹",owned:[]},
+  {id:"jordan",en:"Jordan",es:"Jordania",flag:"🇯🇴",owned:[]},
+  {id:"portugal",en:"Portugal",es:"Portugal",flag:"🇵🇹",owned:[]},
+  {id:"congo_dr",en:"Congo DR",es:"RD Congo",flag:"🇨🇩",owned:[]},
+  {id:"uzbekistan",en:"Uzbekistan",es:"Uzbekistán",flag:"🇺🇿",owned:[]},
+  {id:"colombia",en:"Colombia",es:"Colombia",flag:"🇨🇴",owned:[]},
+  {id:"england",en:"England",es:"Inglaterra",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",owned:[]},
+  {id:"croatia",en:"Croatia",es:"Croacia",flag:"🇭🇷",owned:[]},
+  {id:"ghana",en:"Ghana",es:"Ghana",flag:"🇬🇭",owned:[]},
+  {id:"panama",en:"Panama",es:"Panamá",flag:"🇵🇦",owned:[]}
+];
+// __TEAMS_END__
+
+const INTRO_STICKERS = ["00","FWC1","FWC2","FWC3","FWC4","FWC5","FWC6","FWC7","FWC8","FWC9","FWC10","FWC11","FWC12","FWC13","FWC14","FWC15","FWC16","FWC17","FWC18","FWC19"];
+const INTRO_LABELS   = {"00":"00","FWC1":"F1","FWC2":"F2","FWC3":"F3","FWC4":"F4","FWC5":"F5","FWC6":"F6","FWC7":"F7","FWC8":"F8","FWC9":"F9","FWC10":"F10","FWC11":"F11","FWC12":"F12","FWC13":"F13","FWC14":"F14","FWC15":"F15","FWC16":"F16","FWC17":"F17","FWC18":"F18","FWC19":"F19"};
+const COKE_STICKERS  = ["CC1","CC2","CC3","CC4","CC5","CC6","CC7","CC8","CC9","CC10","CC11","CC12","CC13","CC14"];
+const INTRO_KEY = '__intro__';
+const COKE_KEY  = '__coke__';
+const STICKERS_PER_TEAM = 20;
+const TOTAL = TEAMS.length * STICKERS_PER_TEAM + INTRO_STICKERS.length + COKE_STICKERS.length;
+
+let LANG = 'es';
+let _resetting = false;
+
+const TR = {
+  es:{
+    title:"⚽ Panini Copa del Mundo FIFA 2026",sub:"Rastreador de Figuritas",
+    sum:(o,d,m,p,t)=>`${o+d} / ${t} figuritas recolectadas (${p}%)  ·  ${d} repetida${d!==1?'s':''}  ·  ${m} faltan`,
+    fa:"Todos los equipos",fi:"Incompletos",fc:"Completos",fn:"Sin empezar",
+    fex:"↓ Exportar progreso",fr:"Reiniciar todo",
+    confirm:"¿Reiniciar TODAS las figuritas? No se puede deshacer.",
+    leg:["■ Tengo ✓","■ Repetida ★","■ Me falta","— toca para cambiar estado"],
+    faqbtn:"ⓘ Cómo usar este rastreador ▾",
+    fqs:["¿Qué es esto?","¿Cómo marco una figurita?","¿Qué son las figuritas brillantes (foil)?","¿Se guarda el progreso?","¿Cómo paso mi progreso a otro dispositivo?"],
+    fas:["Rastreador para el álbum oficial Panini Copa del Mundo FIFA 2026. 48 equipos (figuritas 1–20) + 20 figuritas foil FWC + 12 bonus Coca‑Cola = <strong>994 figuritas en total</strong>.","Toca cualquier casilla para ciclar: <span class='key'>vacía</span> → <span class='key' style='color:#00c853'>✓ tengo</span> → <span class='key' style='color:#d4af37'>★ repetida</span> → <span class='key'>vacía</span>. Se guarda automáticamente.","Figuritas foil: escudo del equipo (figurita 1) + 20 figuritas FWC de introducción. El efecto cambia de color según el estado (azul→plata→oro).","Sí — guardado en <strong>localStorage</strong> del navegador en este dispositivo y navegador.","Haz clic en <span class='key'>↓ Exportar progreso</span>. Se descarga un nuevo archivo HTML con todos tus datos incluidos."],
+    note:"* El listado de equipos sigue el álbum oficial Panini. Los números son relativos a cada sección (1–20 por equipo).",
+    cnt:(o,d,m)=>`<span class='count-owned'>${o}✓</span> <span class='count-dup'>${d}★</span> <span class='count-miss'>${m}⬜</span>`
+  },
+  en:{
+    title:"⚽ Panini FIFA World Cup 2026",sub:"Sticker Collection Tracker",
+    sum:(o,d,m,p,t)=>`${o+d} / ${t} stickers collected (${p}%)  ·  ${d} duplicate${d!==1?'s':''}  ·  ${m} missing`,
+    fa:"All Teams",fi:"Incomplete Only",fc:"Complete Sets",fn:"Not Started",
+    fex:"↓ Export Progress",fr:"Reset All",
+    confirm:"Reset ALL stickers? This cannot be undone.",
+    leg:["■ Owned ✓","■ Duplicate ★","■ Missing","— click to cycle state"],
+    faqbtn:"ⓘ How to use this tracker ▾",
+    fqs:["What is this?","How do I tick a sticker?","What are the shimmering foil stickers?","Will my ticks be saved?","How do I move my progress to another device?"],
+    fas:["A tracker for the official Panini FIFA World Cup 2026 album. 48 teams (stickers 1–20 each) + 20 FWC intro foil stickers + 14 Coca-Cola bonus stickers = <strong>994 stickers total</strong>.","Click any box to cycle: <span class='key'>empty</span> → <span class='key' style='color:#00c853'>✓ owned</span> → <span class='key' style='color:#d4af37'>★ duplicate</span> → <span class='key'>empty</span>. Saves automatically.","Foil stickers: team badge (sticker 1) + all 20 FWC intro stickers. The shimmer changes colour with state (blue→silver→gold).","Yes — stored in browser <strong>localStorage</strong> on this device and browser.","Click <span class='key'>↓ Export Progress</span>. Downloads a new copy of the HTML file with your stickers baked in."],
+    note:"* Team list follows the official Panini album. Sticker numbers are per-section (1–20 per team).",
+    cnt:(o,d,m)=>`<span class='count-owned'>${o}✓</span> <span class='count-dup'>${d}★</span> <span class='count-miss'>${m}⬜</span>`
+  }
+};
+
+function t(){return TR[LANG];}
+
+function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch{return{};}}
+function saveState(s){localStorage.setItem(STORAGE_KEY,JSON.stringify(s));}
+
+function getSt(s,key,n){return(s[key]&&s[key][n]!=null)?s[key][n]:0;}
+
+function cycleSticker(el){
+  const key=el.dataset.key, n=el.dataset.n;
+  const s=loadState();
+  if(!s[key])s[key]={};
+  const cur=s[key][n]??0;
+  const nxt=(cur+1)%3;
+  if(nxt===0)delete s[key][n];else s[key][n]=nxt;
+  saveState(s);
+  el.className=el.className.replace(/\bs\d\b/,'')+' s'+nxt;
+  updateCount(key);
+  updateSummary();
+}
+
+function countTeam(s,teamId){
+  const d=s[teamId]||{};
+  let o=0,dup=0;
+  for(let i=1;i<=STICKERS_PER_TEAM;i++){const v=d[i]??0;if(v===1)o++;else if(v===2)dup++;}
+  return{o,dup,m:STICKERS_PER_TEAM-o-dup};
+}
+function countSection(s,key,ids){
+  let o=0,dup=0;
+  ids.forEach(id=>{const v=(s[key]&&s[key][id]!=null)?s[key][id]:0;if(v===1)o++;else if(v===2)dup++;});
+  return{o,dup,m:ids.length-o-dup};
+}
+
+function updateCount(key){
+  const s=loadState();
+  if(key===INTRO_KEY){
+    const{o,dup,m}=countSection(s,INTRO_KEY,INTRO_STICKERS);
+    const c=document.querySelector('[data-type="intro"]');
+    if(c){c.querySelector('.team-count').innerHTML=t().cnt(o,dup,m);c.querySelector('.team-progress-fill').style.width=(o+dup)/INTRO_STICKERS.length*100+'%';}
+  }else if(key===COKE_KEY){
+    const{o,dup,m}=countSection(s,COKE_KEY,COKE_STICKERS);
+    const c=document.querySelector('[data-type="coke"]');
+    if(c){c.querySelector('.team-count').innerHTML=t().cnt(o,dup,m);c.querySelector('.team-progress-fill').style.width=(o+dup)/COKE_STICKERS.length*100+'%';}
+  }else{
+    const{o,dup,m}=countTeam(s,key);
+    const c=document.querySelector(`[data-team="${key}"]`);
+    if(c){c.querySelector('.team-count').innerHTML=t().cnt(o,dup,m);c.querySelector('.team-progress-fill').style.width=(o+dup)/STICKERS_PER_TEAM*100+'%';c.classList.toggle('team-complete',o+dup===STICKERS_PER_TEAM);}
+  }
+}
+
+function updateSummary(){
+  const s=loadState();
+  let owned=0,dups=0;
+  const io=countSection(s,INTRO_KEY,INTRO_STICKERS);owned+=io.o;dups+=io.dup;
+  const co=countSection(s,COKE_KEY,COKE_STICKERS);owned+=co.o;dups+=co.dup;
+  TEAMS.forEach(tm=>{const{o,dup}=countTeam(s,tm.id);owned+=o;dups+=dup;});
+  const miss=TOTAL-owned-dups;
+  const pct=Math.round((owned+dups)/TOTAL*100);
+  document.getElementById('summary').textContent=t().sum(owned,dups,miss,pct,TOTAL);
+  document.getElementById('total-bar').style.width=pct+'%';
+}
+
+function makeSticker(key,n,state,extraClass){
+  const div=document.createElement('div');
+  div.className='sticker-item'+(extraClass?' '+extraClass:'')+' s'+state;
+  div.dataset.key=key;div.dataset.n=n;
+  div.onclick=function(){cycleSticker(this);};
+  const box=document.createElement('div');box.className='sticker-box';
+  const num=document.createElement('span');num.className='sticker-num';
+  num.textContent=(typeof n==='string'&&n.startsWith('FWC'))?n.replace('FWC','F'):n;
+  div.appendChild(box);div.appendChild(num);
+  return div;
+}
+
+function buildCards(){
+  const s=loadState();
+  if(!s[INTRO_KEY])s[INTRO_KEY]={};if(!s[COKE_KEY])s[COKE_KEY]={};
+  if(!_resetting){
+    if(typeof INTRO_OWNED==='object'&&!Array.isArray(INTRO_OWNED))Object.entries(INTRO_OWNED).forEach(([id,v])=>{if(!(id in s[INTRO_KEY]))s[INTRO_KEY][id]=v;});
+    if(typeof COKE_OWNED==='object'&&!Array.isArray(COKE_OWNED))Object.entries(COKE_OWNED).forEach(([id,v])=>{if(!(id in s[COKE_KEY]))s[COKE_KEY][id]=v;});
+    TEAMS.forEach(tm=>{if(!s[tm.id])s[tm.id]={};if(Array.isArray(tm.owned))tm.owned.forEach(n=>{if(!(n in s[tm.id]))s[tm.id][n]=1;});});
+  }else{TEAMS.forEach(tm=>{if(!s[tm.id])s[tm.id]={};});}
+  saveState(s);
+
+  const grid=document.getElementById('grid');grid.innerHTML='';
+
+  // Intro card
+  const{o:io,dup:id2,m:im}=countSection(s,INTRO_KEY,INTRO_STICKERS);
+  const introCard=document.createElement('div');
+  introCard.className='team-card intro-card';introCard.dataset.type='intro';
+  introCard.innerHTML=`<div class="team-header"><span class="team-name">✦ ${LANG==='es'?'Introducción y Figuritas FWC Foil':'Introduction &amp; FWC Foil Stickers'}</span><span class="team-count">${t().cnt(io,id2,im)}</span></div><div class="team-progress"><div class="team-progress-fill" style="width:${(io+id2)/INTRO_STICKERS.length*100}%"></div></div><div class="stickers" id="stickers-intro"></div>`;
+  const introDiv=introCard.querySelector('#stickers-intro');
+  INTRO_STICKERS.forEach(id=>{introDiv.appendChild(makeSticker(INTRO_KEY,id,getSt(s,INTRO_KEY,id),'foil-sticker'));});
+  grid.appendChild(introCard);
+
+  // Coke card
+  const{o:co,dup:cd,m:cm}=countSection(s,COKE_KEY,COKE_STICKERS);
+  const cokeCard=document.createElement('div');
+  cokeCard.className='team-card coke-card';cokeCard.dataset.type='coke';
+  cokeCard.innerHTML=`<div class="team-header"><span class="team-name">🥤 ${LANG==='es'?'Figuritas Bonus Coca-Cola':'Coca-Cola Bonus Stickers'}</span><span class="team-count">${t().cnt(co,cd,cm)}</span></div><div class="team-progress"><div class="team-progress-fill" style="width:${(co+cd)/COKE_STICKERS.length*100}%"></div></div><div class="stickers" id="stickers-coke"></div>`;
+  const cokeDiv=cokeCard.querySelector('#stickers-coke');
+  COKE_STICKERS.forEach(id=>{cokeDiv.appendChild(makeSticker(COKE_KEY,id,getSt(s,COKE_KEY,id),'coke-sticker'));});
+  grid.appendChild(cokeCard);
+
+  // Team cards
+  TEAMS.forEach(tm=>{
+    const{o,dup,m}=countTeam(s,tm.id);
+    const card=document.createElement('div');
+    card.className='team-card'+(o+dup===STICKERS_PER_TEAM?' team-complete':'');
+    card.dataset.team=tm.id;
+    card.innerHTML=`<div class="team-header"><span class="team-name">${tm.flag} ${tm[LANG]}</span><span class="team-count">${t().cnt(o,dup,m)}</span></div><div class="team-progress"><div class="team-progress-fill" style="width:${(o+dup)/STICKERS_PER_TEAM*100}%"></div></div><div class="stickers" id="stickers-${tm.id}"></div>`;
+    const div=card.querySelector(`#stickers-${tm.id}`);
+    for(let i=1;i<=STICKERS_PER_TEAM;i++){div.appendChild(makeSticker(tm.id,i,getSt(s,tm.id,i),i===1?'foil-sticker':''));}
+    grid.appendChild(card);
+  });
+
+  updateSummary();
+}
+
+function filterTeams(mode,btn){
+  document.querySelectorAll('.filter-bar button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const s=loadState();
+  document.querySelectorAll('.team-card').forEach(card=>{
+    if(card.dataset.type==='intro'||card.dataset.type==='coke'){card.style.display='';return;}
+    const{o,dup}=countTeam(s,card.dataset.team);
+    const tot=o+dup;
+    let show=true;
+    if(mode==='incomplete')show=tot>0&&tot<STICKERS_PER_TEAM;
+    else if(mode==='complete')show=tot===STICKERS_PER_TEAM;
+    else if(mode==='none')show=tot===0;
+    card.style.display=show?'':'none';
+  });
+}
+
+function resetAll(){
+  if(!confirm(t().confirm))return;
+  _resetting=true;localStorage.removeItem(STORAGE_KEY);buildCards();_resetting=false;
+}
+
+function setLang(lang){
+  LANG=lang;
+  document.getElementById('btn-es').classList.toggle('active',lang==='es');
+  document.getElementById('btn-en').classList.toggle('active',lang==='en');
+  document.getElementById('h1').textContent=t().title;
+  document.getElementById('tagline').textContent=t().sub;
+  document.getElementById('leg-owned').textContent=t().leg[0];
+  document.getElementById('leg-dup').textContent=t().leg[1];
+  document.getElementById('leg-miss').textContent=t().leg[2];
+  document.getElementById('leg-tap').textContent='— '+t().leg[3];
+  document.getElementById('faq-toggle').textContent=t().faqbtn;
+  document.getElementById('fb-all').textContent=t().fa;
+  document.getElementById('fb-inc').textContent=t().fi;
+  document.getElementById('fb-comp').textContent=t().fc;
+  document.getElementById('fb-none').textContent=t().fn;
+  document.getElementById('fb-exp').textContent=t().fex;
+  document.getElementById('fb-rst').textContent=t().fr;
+  document.getElementById('fnote').textContent=t().note;
+  for(let i=0;i<5;i++){
+    document.getElementById('fq'+(i+1)).textContent=t().fqs[i];
+    document.getElementById('fa'+(i+1)).innerHTML=t().fas[i];
+  }
+  // Rebuild to update team names and section headers
+  buildCards();
+}
+
+function exportProgress(){
+  const s=loadState();
+  const introObj=s[INTRO_KEY]||{};
+  const cokeObj=s[COKE_KEY]||{};
+  const introStr='// __INTRO_STATE_START__\nconst INTRO_OWNED = '+JSON.stringify(introObj)+';\n// __INTRO_STATE_END__';
+  const cokeStr='// __COKE_STATE_START__\nconst COKE_OWNED = '+JSON.stringify(cokeObj)+';\n// __COKE_STATE_END__';
+  const teamsStr='// __TEAMS_START__\nconst TEAMS = [\n'+
+    TEAMS.map(tm=>{
+      const o=s[tm.id]||{};
+      const owned=Object.entries(o).filter(([,v])=>v>0).map(([n,v])=>({n:isNaN(n)?n:parseInt(n),v}));
+      return '  '+JSON.stringify({...tm,owned});
+    }).join(',\n')+'\n];\n// __TEAMS_END__';
+  const updated=PAGE_TEMPLATE
+    .replace(/\/\/ __INTRO_STATE_START__[\s\S]*?\/\/ __INTRO_STATE_END__/,introStr)
+    .replace(/\/\/ __COKE_STATE_START__[\s\S]*?\/\/ __COKE_STATE_END__/,cokeStr)
+    .replace(/\/\/ __TEAMS_START__[\s\S]*?\/\/ __TEAMS_END__/,teamsStr);
+  const blob=new Blob([updated],{type:'text/html'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Panini_FWC2026_Tracker.html';a.click();URL.revokeObjectURL(a.href);
+}
+
+const PAGE_TEMPLATE=document.documentElement.outerHTML;
+buildCards();
+</script>
+</body>
+</html>
