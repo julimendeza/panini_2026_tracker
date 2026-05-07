@@ -101,6 +101,8 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 .faq-body p .key{background:#1a4a2a;border:1px solid #2a6040;border-radius:4px;padding:1px 6px;font-size:.8rem;color:#ddf4e8;white-space:nowrap}
 .note{text-align:center;font-size:.75rem;color:#3a6050;margin-top:24px;font-style:italic}
 @media print{body{background:#fff;color:#000;padding:10px}h1{color:#003087;text-shadow:none}.filter-bar,.faq-wrap,.lang-bar{display:none}.team-card{border:1px solid #ccc;break-inside:avoid;background:#fff}.team-header{background:#003087!important;animation:none!important}.team-name,.team-count{color:#fff!important}.sticker-box{border-color:#999;background:#fff;animation:none!important}.sticker-item.s1 .sticker-box{background:#003087;border-color:#003087;color:#fff}.sticker-item.s2 .sticker-box{background:#b8860b;border-color:#b8860b;color:#fff}#total-bar-wrap{background:#ddd}.intro-card,.coke-card{grid-column:auto}}
+
+.team-flag{height:16px;width:auto;vertical-align:middle;margin-right:5px;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.35)}
 </style>
 </head>
 <body>
@@ -158,54 +160,54 @@ const COKE_OWNED = {};
 
 // __TEAMS_START__
 const TEAMS = [
-  {id:"mexico",en:"Mexico",es:"México",flag:"🇲🇽",owned:[]},
-  {id:"south_africa",en:"South Africa",es:"Sudáfrica",flag:"🇿🇦",owned:[]},
-  {id:"south_korea",en:"South Korea",es:"Corea del Sur",flag:"🇰🇷",owned:[]},
-  {id:"czechia",en:"Czechia",es:"Chequia",flag:"🇨🇿",owned:[]},
-  {id:"canada",en:"Canada",es:"Canadá",flag:"🇨🇦",owned:[]},
-  {id:"bosnia",en:"Bosnia and Herzegovina",es:"Bosnia y Herzegovina",flag:"🇧🇦",owned:[]},
-  {id:"qatar",en:"Qatar",es:"Catar",flag:"🇶🇦",owned:[]},
-  {id:"switzerland",en:"Switzerland",es:"Suiza",flag:"🇨🇭",owned:[]},
-  {id:"brazil",en:"Brazil",es:"Brasil",flag:"🇧🇷",owned:[]},
-  {id:"morocco",en:"Morocco",es:"Marruecos",flag:"🇲🇦",owned:[]},
-  {id:"haiti",en:"Haiti",es:"Haití",flag:"🇭🇹",owned:[]},
-  {id:"scotland",en:"Scotland",es:"Escocia",flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",owned:[]},
-  {id:"usa",en:"USA",es:"Estados Unidos",flag:"🇺🇸",owned:[]},
-  {id:"paraguay",en:"Paraguay",es:"Paraguay",flag:"🇵🇾",owned:[]},
-  {id:"australia",en:"Australia",es:"Australia",flag:"🇦🇺",owned:[]},
-  {id:"turkiye",en:"Türkiye",es:"Turquía",flag:"🇹🇷",owned:[]},
-  {id:"germany",en:"Germany",es:"Alemania",flag:"🇩🇪",owned:[]},
-  {id:"curacao",en:"Curaçao",es:"Curazao",flag:"🇨🇼",owned:[]},
-  {id:"ivory_coast",en:"Ivory Coast",es:"Costa de Marfil",flag:"🇨🇮",owned:[]},
-  {id:"ecuador",en:"Ecuador",es:"Ecuador",flag:"🇪🇨",owned:[]},
-  {id:"netherlands",en:"Netherlands",es:"Países Bajos",flag:"🇳🇱",owned:[]},
-  {id:"japan",en:"Japan",es:"Japón",flag:"🇯🇵",owned:[]},
-  {id:"sweden",en:"Sweden",es:"Suecia",flag:"🇸🇪",owned:[]},
-  {id:"tunisia",en:"Tunisia",es:"Túnez",flag:"🇹🇳",owned:[]},
-  {id:"belgium",en:"Belgium",es:"Bélgica",flag:"🇧🇪",owned:[]},
-  {id:"egypt",en:"Egypt",es:"Egipto",flag:"🇪🇬",owned:[]},
-  {id:"iran",en:"Iran",es:"Irán",flag:"🇮🇷",owned:[]},
-  {id:"new_zealand",en:"New Zealand",es:"Nueva Zelanda",flag:"🇳🇿",owned:[]},
-  {id:"spain",en:"Spain",es:"España",flag:"🇪🇸",owned:[]},
-  {id:"cape_verde",en:"Cape Verde",es:"Cabo Verde",flag:"🇨🇻",owned:[]},
-  {id:"saudi_arabia",en:"Saudi Arabia",es:"Arabia Saudita",flag:"🇸🇦",owned:[]},
-  {id:"uruguay",en:"Uruguay",es:"Uruguay",flag:"🇺🇾",owned:[]},
-  {id:"france",en:"France",es:"Francia",flag:"🇫🇷",owned:[]},
-  {id:"senegal",en:"Senegal",es:"Senegal",flag:"🇸🇳",owned:[]},
-  {id:"iraq",en:"Iraq",es:"Irak",flag:"🇮🇶",owned:[]},
-  {id:"norway",en:"Norway",es:"Noruega",flag:"🇳🇴",owned:[]},
-  {id:"argentina",en:"Argentina",es:"Argentina",flag:"🇦🇷",owned:[]},
-  {id:"algeria",en:"Algeria",es:"Argelia",flag:"🇩🇿",owned:[]},
-  {id:"austria",en:"Austria",es:"Austria",flag:"🇦🇹",owned:[]},
-  {id:"jordan",en:"Jordan",es:"Jordania",flag:"🇯🇴",owned:[]},
-  {id:"portugal",en:"Portugal",es:"Portugal",flag:"🇵🇹",owned:[]},
-  {id:"congo_dr",en:"Congo DR",es:"RD Congo",flag:"🇨🇩",owned:[]},
-  {id:"uzbekistan",en:"Uzbekistan",es:"Uzbekistán",flag:"🇺🇿",owned:[]},
-  {id:"colombia",en:"Colombia",es:"Colombia",flag:"🇨🇴",owned:[]},
-  {id:"england",en:"England",es:"Inglaterra",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",owned:[]},
-  {id:"croatia",en:"Croatia",es:"Croacia",flag:"🇭🇷",owned:[]},
-  {id:"ghana",en:"Ghana",es:"Ghana",flag:"🇬🇭",owned:[]},
-  {id:"panama",en:"Panama",es:"Panamá",flag:"🇵🇦",owned:[]}
+  {id:"mexico",en:"Mexico",es:"México",flag:"🇲🇽",owned:[],code:"mx"},
+  {id:"south_africa",en:"South Africa",es:"Sudáfrica",flag:"🇿🇦",owned:[],code:"za"},
+  {id:"south_korea",en:"South Korea",es:"Corea del Sur",flag:"🇰🇷",owned:[],code:"kr"},
+  {id:"czechia",en:"Czechia",es:"Chequia",flag:"🇨🇿",owned:[],code:"cz"},
+  {id:"canada",en:"Canada",es:"Canadá",flag:"🇨🇦",owned:[],code:"ca"},
+  {id:"bosnia",en:"Bosnia and Herzegovina",es:"Bosnia y Herzegovina",flag:"🇧🇦",owned:[],code:"ba"},
+  {id:"qatar",en:"Qatar",es:"Catar",flag:"🇶🇦",owned:[],code:"qa"},
+  {id:"switzerland",en:"Switzerland",es:"Suiza",flag:"🇨🇭",owned:[],code:"ch"},
+  {id:"brazil",en:"Brazil",es:"Brasil",flag:"🇧🇷",owned:[],code:"br"},
+  {id:"morocco",en:"Morocco",es:"Marruecos",flag:"🇲🇦",owned:[],code:"ma"},
+  {id:"haiti",en:"Haiti",es:"Haití",flag:"🇭🇹",owned:[],code:"ht"},
+  {id:"scotland",en:"Scotland",es:"Escocia",flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",owned:[],code:"gb-sct"},
+  {id:"usa",en:"USA",es:"Estados Unidos",flag:"🇺🇸",owned:[],code:"us"},
+  {id:"paraguay",en:"Paraguay",es:"Paraguay",flag:"🇵🇾",owned:[],code:"py"},
+  {id:"australia",en:"Australia",es:"Australia",flag:"🇦🇺",owned:[],code:"au"},
+  {id:"turkiye",en:"Türkiye",es:"Turquía",flag:"🇹🇷",owned:[],code:"tr"},
+  {id:"germany",en:"Germany",es:"Alemania",flag:"🇩🇪",owned:[],code:"de"},
+  {id:"curacao",en:"Curaçao",es:"Curazao",flag:"🇨🇼",owned:[],code:"cw"},
+  {id:"ivory_coast",en:"Ivory Coast",es:"Costa de Marfil",flag:"🇨🇮",owned:[],code:"ci"},
+  {id:"ecuador",en:"Ecuador",es:"Ecuador",flag:"🇪🇨",owned:[],code:"ec"},
+  {id:"netherlands",en:"Netherlands",es:"Países Bajos",flag:"🇳🇱",owned:[],code:"nl"},
+  {id:"japan",en:"Japan",es:"Japón",flag:"🇯🇵",owned:[],code:"jp"},
+  {id:"sweden",en:"Sweden",es:"Suecia",flag:"🇸🇪",owned:[],code:"se"},
+  {id:"tunisia",en:"Tunisia",es:"Túnez",flag:"🇹🇳",owned:[],code:"tn"},
+  {id:"belgium",en:"Belgium",es:"Bélgica",flag:"🇧🇪",owned:[],code:"be"},
+  {id:"egypt",en:"Egypt",es:"Egipto",flag:"🇪🇬",owned:[],code:"eg"},
+  {id:"iran",en:"Iran",es:"Irán",flag:"🇮🇷",owned:[],code:"ir"},
+  {id:"new_zealand",en:"New Zealand",es:"Nueva Zelanda",flag:"🇳🇿",owned:[],code:"nz"},
+  {id:"spain",en:"Spain",es:"España",flag:"🇪🇸",owned:[],code:"es"},
+  {id:"cape_verde",en:"Cape Verde",es:"Cabo Verde",flag:"🇨🇻",owned:[],code:"cv"},
+  {id:"saudi_arabia",en:"Saudi Arabia",es:"Arabia Saudita",flag:"🇸🇦",owned:[],code:"sa"},
+  {id:"uruguay",en:"Uruguay",es:"Uruguay",flag:"🇺🇾",owned:[],code:"uy"},
+  {id:"france",en:"France",es:"Francia",flag:"🇫🇷",owned:[],code:"fr"},
+  {id:"senegal",en:"Senegal",es:"Senegal",flag:"🇸🇳",owned:[],code:"sn"},
+  {id:"iraq",en:"Iraq",es:"Irak",flag:"🇮🇶",owned:[],code:"iq"},
+  {id:"norway",en:"Norway",es:"Noruega",flag:"🇳🇴",owned:[],code:"no"},
+  {id:"argentina",en:"Argentina",es:"Argentina",flag:"🇦🇷",owned:[],code:"ar"},
+  {id:"algeria",en:"Algeria",es:"Argelia",flag:"🇩🇿",owned:[],code:"dz"},
+  {id:"austria",en:"Austria",es:"Austria",flag:"🇦🇹",owned:[],code:"at"},
+  {id:"jordan",en:"Jordan",es:"Jordania",flag:"🇯🇴",owned:[],code:"jo"},
+  {id:"portugal",en:"Portugal",es:"Portugal",flag:"🇵🇹",owned:[],code:"pt"},
+  {id:"congo_dr",en:"Congo DR",es:"RD Congo",flag:"🇨🇩",owned:[],code:"cd"},
+  {id:"uzbekistan",en:"Uzbekistan",es:"Uzbekistán",flag:"🇺🇿",owned:[],code:"uz"},
+  {id:"colombia",en:"Colombia",es:"Colombia",flag:"🇨🇴",owned:[],code:"co"},
+  {id:"england",en:"England",es:"Inglaterra",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",owned:[],code:"gb-eng"},
+  {id:"croatia",en:"Croatia",es:"Croacia",flag:"🇭🇷",owned:[],code:"hr"},
+  {id:"ghana",en:"Ghana",es:"Ghana",flag:"🇬🇭",owned:[],code:"gh"},
+  {id:"panama",en:"Panama",es:"Panamá",flag:"🇵🇦",owned:[],code:"pa"}
 ];
 // __TEAMS_END__
 
@@ -358,7 +360,7 @@ function buildCards(){
     const card=document.createElement('div');
     card.className='team-card'+(o+dup===STICKERS_PER_TEAM?' team-complete':'');
     card.dataset.team=tm.id;
-    card.innerHTML=`<div class="team-header"><span class="team-name">${tm.flag} ${tm[LANG]}</span><span class="team-count">${t().cnt(o,dup,m)}</span></div><div class="team-progress"><div class="team-progress-fill" style="width:${(o+dup)/STICKERS_PER_TEAM*100}%"></div></div><div class="stickers" id="stickers-${tm.id}"></div>`;
+    card.innerHTML=`<div class="team-header"><span class="team-name"><img class="team-flag" src="https://flagcdn.com/32x24/${tm.code}.png" alt="${tm[LANG]}">${tm[LANG]}</span><span class="team-count">${t().cnt(o,dup,m)}</span></div><div class="team-progress"><div class="team-progress-fill" style="width:${(o+dup)/STICKERS_PER_TEAM*100}%"></div></div><div class="stickers" id="stickers-${tm.id}"></div>`;
     const div=card.querySelector(`#stickers-${tm.id}`);
     for(let i=1;i<=STICKERS_PER_TEAM;i++){div.appendChild(makeSticker(tm.id,i,getSt(s,tm.id,i),i===1?'foil-sticker':''));}
     grid.appendChild(card);
