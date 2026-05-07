@@ -6,21 +6,21 @@
 <title>Panini FIFA World Cup 2026 – Sticker Tracker</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(150deg,#061c0c 0%,#0e3a1e 22%,#1a5c30 46%,#0c4020 68%,#071a0c 100%);background-attachment:fixed;color:#ddf4e8;padding:20px;min-height:100vh}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#d0cfbb;background:linear-gradient(150deg,#061a0f 0%,#0a2212 30%,#0d2e1b 55%,#071c10 85%,#061a0f 100%);background-attachment:fixed;color:#ddf4e8;padding:20px;min-height:100vh}
 h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,.5);margin-bottom:4px}
-#tagline{text-align:center;font-size:.82rem;color:#7aaa8a;margin-bottom:8px;letter-spacing:.04em}
-#summary{text-align:center;font-size:.92rem;color:#9ecfb0;margin-bottom:6px}
-#total-bar-wrap{max-width:600px;margin:0 auto 6px;background:#0a2c14;border-radius:8px;height:10px;overflow:hidden}
+#tagline{text-align:center;font-size:.82rem;color:#6a9a7a;margin-bottom:8px;letter-spacing:.04em}
+#summary{text-align:center;font-size:.92rem;color:#8ab898;margin-bottom:6px}
+#total-bar-wrap{max-width:600px;margin:0 auto 6px;background:#061a0f;border-radius:8px;height:10px;overflow:hidden}
 #total-bar{height:100%;background:linear-gradient(90deg,#ffd700,#ff8c00);border-radius:8px;transition:width .3s}
-#legend{text-align:center;font-size:.75rem;color:#4a8060;margin-bottom:18px}
+#legend{text-align:center;font-size:.75rem;color:#3a6a4a;margin-bottom:18px}
 #legend span{margin:0 8px}
 
 .lang-bar{text-align:center;margin-bottom:14px}
-.lang-btn{background:#1e5c30;color:#c8ecd8;border:1px solid #2d7040;padding:5px 14px;border-radius:20px;cursor:pointer;margin:0 3px;font-size:.82rem;transition:all .2s}
+.lang-btn{background:#163923;color:#b8d8c4;border:1px solid #1e4a2c;padding:5px 14px;border-radius:20px;cursor:pointer;margin:0 3px;font-size:.82rem;transition:all .2s}
 .lang-btn:hover,.lang-btn.active{background:#ffd700;color:#0c3520;border-color:#ffd700;font-weight:bold}
 
 .filter-bar{text-align:center;margin-bottom:20px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
-.filter-bar button{background:#1e5c30;color:#c8ecd8;border:1px solid #2d7040;padding:6px 16px;border-radius:20px;cursor:pointer;font-size:.82rem;transition:all .2s}
+.filter-bar button{background:#163923;color:#b8d8c4;border:1px solid #1e4a2c;padding:6px 16px;border-radius:20px;cursor:pointer;font-size:.82rem;transition:all .2s}
 .filter-bar button:hover,.filter-bar button.active{background:#ffd700;color:#0c3520;border-color:#ffd700;font-weight:bold}
 .btn-export{background:#1a5e20!important;color:#fff!important;border-color:#2a8030!important}
 .btn-export:hover{background:#1f7025!important}
@@ -28,11 +28,11 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 .btn-reset:hover{background:#a00!important}
 
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1400px;margin:0 auto}
-.team-card{background:#1e5c30;border:1px solid #2d7040;border-radius:12px;overflow:hidden;transition:box-shadow .2s}
+.team-card{background:#163923;border:1px solid #1e4a2c;border-radius:12px;overflow:hidden;transition:box-shadow .2s}
 .team-card:hover{box-shadow:0 4px 22px rgba(0,220,80,.25)}
 .team-complete:hover{box-shadow:0 4px 22px rgba(212,175,55,.5)!important}
 .intro-card,.coke-card{grid-column:1/-1}
-.intro-card .team-header{background:#ccd8d0;border-bottom-color:#a0b4a8}
+.intro-card .team-header{background:#c8d4ce;border-bottom-color:#9eb0a8}
 .intro-card .team-name{color:#0a3020}
 .intro-card:hover{box-shadow:0 4px 22px rgba(80,200,140,.3)!important}
 .coke-card .team-header{background:linear-gradient(135deg,#8b0000 0%,#cc0000 45%,#8b0000 100%);border-bottom-color:#cc0000}
@@ -44,11 +44,11 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 .team-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#ccd4cc;border-bottom:1px solid #a8b8a8}
 .team-name{font-weight:700;font-size:.93rem;color:#111;display:flex;align-items:center;gap:6px}
 .team-count{font-size:.75rem;color:#333;white-space:nowrap;text-align:right;line-height:1.5}
-.count-owned{color:#4cdd80}
+.count-owned{color:#3bb666}
 .count-dup{color:#ffd700}
 .count-miss{color:#5a8870}
-.team-progress{height:4px;background:#b8c8b8}
-.team-progress-fill{height:100%;background:linear-gradient(90deg,#00c853,#64dd17);transition:width .3s}
+.team-progress{height:4px;background:#1e3d26}
+.team-progress-fill{height:100%;background:linear-gradient(90deg,#33a768,#3bb666);transition:width .3s}
 
 @keyframes gold-shimmer{0%{box-shadow:0 0 8px 3px rgba(212,175,55,.45)}50%{box-shadow:0 0 14px 5px rgba(212,175,55,.65)}100%{box-shadow:0 0 8px 3px rgba(212,175,55,.45)}}
 .team-complete .team-header{background:linear-gradient(135deg,#b8860b 0%,#d4af37 45%,#c8960c 100%);animation:gold-shimmer 5s ease-in-out infinite;border-bottom-color:#d4af37}
@@ -59,13 +59,13 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 .intro-card .stickers,.coke-card .stickers{grid-template-columns:repeat(10,1fr)}
 
 .sticker-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:4px 2px;border-radius:6px;transition:background .15s;user-select:none}
-.sticker-item:hover{background:#164a24}
-.sticker-box{width:24px;height:24px;border-radius:5px;border:2px solid #1e4a2e;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;background:#2a7040;transition:border-color .15s,box-shadow .15s}
-.sticker-num{font-size:.62rem;color:#4a8060;margin-top:2px;transition:color .15s}
+.sticker-item:hover{background:#0d2e1b}
+.sticker-box{width:24px;height:24px;border-radius:5px;border:2px solid #1a3d24;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;background:#0d2e1b;transition:border-color .15s,box-shadow .15s}
+.sticker-num{font-size:.62rem;color:#4a7a5a;margin-top:2px;transition:color .15s}
 
-.sticker-item.s1 .sticker-box{background:#00c853;border-color:#00e676;box-shadow:0 0 8px rgba(0,230,100,.45);color:#fff}
+.sticker-item.s1 .sticker-box{background:#2da058;border-color:#3bb666;box-shadow:0 0 8px rgba(59,182,102,.4);color:#fff}
 .sticker-item.s1 .sticker-box::after{content:'✓'}
-.sticker-item.s1 .sticker-num{color:#4cdd80;font-weight:bold}
+.sticker-item.s1 .sticker-num{color:#3bb666;font-weight:bold}
 
 .sticker-item.s2 .sticker-box{background:#c8960c;border-color:#d4af37;box-shadow:0 0 8px rgba(212,175,55,.5);color:#fff}
 .sticker-item.s2 .sticker-box::after{content:'★'}
@@ -73,7 +73,7 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 
 @keyframes foil-sweep{0%{background-position:220% center}100%{background-position:-220% center}}
 .foil-sticker.s0 .sticker-box{
-  background:linear-gradient(110deg,#1e5030 20%,#347850 38%,#78d8a0 50%,#347850 62%,#1e5030 80%);
+  background:linear-gradient(110deg,#0d2e1b 20%,#1e4a2c 38%,#4ab878 50%,#1e4a2c 62%,#0d2e1b 80%);
   background-size:300% auto;border-color:#2a7050;animation:foil-sweep 4s linear infinite}
 .foil-sticker.s1 .sticker-box{
   background:linear-gradient(110deg,#5a6878 15%,#9ab4c8 38%,#dceaf6 50%,#9ab4c8 62%,#5a6878 85%)!important;
@@ -92,15 +92,15 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 .coke-sticker.s1 .sticker-num,.coke-sticker.s2 .sticker-num{color:#e61c23;font-weight:bold}
 
 .faq-wrap{max-width:700px;margin:0 auto 24px}
-.faq-toggle{display:block;width:100%;background:#1e5c30;color:#ffd700;border:1px solid #2d7040;border-radius:8px;padding:8px 16px;font-size:.88rem;cursor:pointer;text-align:center;letter-spacing:.03em}
-.faq-toggle:hover{background:#236835}
-.faq-body{display:none;background:#0e3018;border:1px solid #2a6038;border-top:none;border-radius:0 0 8px 8px;padding:16px 20px}
+.faq-toggle{display:block;width:100%;background:#163923;color:#ffd700;border:1px solid #1e4a2c;border-radius:8px;padding:8px 16px;font-size:.88rem;cursor:pointer;text-align:center;letter-spacing:.03em}
+.faq-toggle:hover{background:#1a4228}
+.faq-body{display:none;background:#061a0f;border:1px solid #1a3a22;border-top:none;border-radius:0 0 8px 8px;padding:16px 20px}
 .faq-body.open{display:block}
 .faq-body h3{color:#ffd700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;margin:14px 0 4px}
 .faq-body h3:first-child{margin-top:0}
-.faq-body p{font-size:.85rem;color:#8ec8a8;line-height:1.55}
-.faq-body p .key{background:#1a4a2a;border:1px solid #2a6040;border-radius:4px;padding:1px 6px;font-size:.8rem;color:#ddf4e8;white-space:nowrap}
-.note{text-align:center;font-size:.75rem;color:#3a6050;margin-top:24px;font-style:italic}
+.faq-body p{font-size:.85rem;color:#8ab898;line-height:1.55}
+.faq-body p .key{background:#163923;border:1px solid #1e4a2c;border-radius:4px;padding:1px 6px;font-size:.8rem;color:#d0cfbb;white-space:nowrap}
+.note{text-align:center;font-size:.75rem;color:#2e5038;margin-top:24px;font-style:italic}
 @media print{body{background:#fff;color:#000;padding:10px}h1{color:#003087;text-shadow:none}.filter-bar,.faq-wrap,.lang-bar{display:none}.team-card{border:1px solid #ccc;break-inside:avoid;background:#fff}.team-header{background:#003087!important;animation:none!important}.team-name,.team-count{color:#fff!important}.sticker-box{border-color:#999;background:#fff;animation:none!important}.sticker-item.s1 .sticker-box{background:#003087;border-color:#003087;color:#fff}.sticker-item.s2 .sticker-box{background:#b8860b;border-color:#b8860b;color:#fff}#total-bar-wrap{background:#ddd}.intro-card,.coke-card{grid-column:auto}}
 
 .team-flag{height:16px;width:auto;vertical-align:middle;margin-right:5px;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.35)}
@@ -109,20 +109,20 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 @media(max-width:600px){.grid{grid-template-columns:1fr}}
 
 /* View banner */
-#view-banner{background:#1a3d28;border:1px solid #2d7040;border-radius:8px;padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+#view-banner{background:#163923;border:1px solid #1e4a2c;border-radius:8px;padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 #vb-label{color:#ddf4e8;font-size:.95rem}
 #vb-label strong{color:#ffd700}
-.vb-btn{background:#0c3520;color:#ffd700;border:1px solid #2d7040;border-radius:20px;padding:5px 14px;font-size:.82rem;cursor:pointer;transition:all .2s}
+.vb-btn{background:#0c3520;color:#ffd700;border:1px solid #1e4a2c;border-radius:20px;padding:5px 14px;font-size:.82rem;cursor:pointer;transition:all .2s}
 .vb-btn:hover{background:#ffd700;color:#0c3520}
 /* Trade panel */
-#trade-panel{background:#122e1e;border:1px solid #1e4a2e;border-radius:10px;padding:14px 18px;margin-bottom:20px}
+#trade-panel{background:#0d2410;border:1px solid #1a3a20;border-radius:10px;padding:14px 18px;margin-bottom:20px}
 .trade-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media(max-width:600px){.trade-grid{grid-template-columns:1fr}}
 .trade-col h3{color:#ffd700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .trade-badge{background:rgba(255,215,0,.15);color:#ffd700;border-radius:99px;padding:1px 8px;font-size:.75rem;font-weight:bold}
-.trade-row{font-size:.82rem;color:#9ecfb0;margin:4px 0;line-height:1.5;display:flex;align-items:center;gap:5px}
+.trade-row{font-size:.82rem;color:#8ab898;margin:4px 0;line-height:1.5;display:flex;align-items:center;gap:5px}
 .trade-row img{border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.3)}
-.trade-nums{color:#ddf4e8;font-weight:500}
+.trade-nums{color:#d0cfbb;font-weight:500}
 .no-trades{text-align:center;color:#5a8870;font-size:.85rem;padding:4px 0}
 /* Toast */
 #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(8px);background:#ffd700;color:#0a2410;padding:10px 24px;border-radius:99px;font-weight:700;font-size:.88rem;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9999}
@@ -135,7 +135,7 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 <p id="tagline">Rastreador de Figuritas</p>
 <div id="summary">Cargando...</div>
 <div id="total-bar-wrap"><div id="total-bar" style="width:0%"></div></div>
-<p id="legend"><span id="leg-owned" style="color:#00c853">■ Tengo ✓</span><span id="leg-dup" style="color:#d4af37">■ Repetida ★</span><span id="leg-miss" style="color:#4a5a70">■ Me falta</span><span id="leg-tap" style="color:#556">— toca para cambiar estado</span></p>
+<p id="legend"><span id="leg-owned" style="color:#3bb666">■ Tengo ✓</span><span id="leg-dup" style="color:#d4af37">■ Repetida ★</span><span id="leg-miss" style="color:#4a5a70">■ Me falta</span><span id="leg-tap" style="color:#556">— toca para cambiar estado</span></p>
 
 <div class="lang-bar" id="lang-bar">
   <button class="lang-btn active" id="btn-es" onclick="setLang('es')"><img src="https://flagcdn.com/16x12/es.png" alt="ES" style="vertical-align:middle;margin-right:4px">Español</button>
@@ -154,7 +154,7 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
     <h3 id="fq1">¿Qué es esto?</h3>
     <p id="fa1">Rastreador para el álbum oficial Panini Copa del Mundo FIFA 2026. 48 equipos (figuritas 1–20) + 20 figuritas foil FWC de introducción + 14 figuritas bonus Coca‑Cola = <strong>994 figuritas en total</strong>. Marca lo que tienes.</p>
     <h3 id="fq2">¿Cómo marco una figurita?</h3>
-    <p id="fa2">Toca cualquier casilla para ciclar entre los tres estados: <span class="key">vacía</span> → <span class="key" style="color:#00c853">✓ tengo</span> → <span class="key" style="color:#d4af37">★ repetida</span> → <span class="key">vacía</span>. Se guarda automáticamente.</p>
+    <p id="fa2">Toca cualquier casilla para ciclar entre los tres estados: <span class="key">vacía</span> → <span class="key" style="color:#3bb666">✓ tengo</span> → <span class="key" style="color:#d4af37">★ repetida</span> → <span class="key">vacía</span>. Se guarda automáticamente.</p>
     <h3 id="fq3">¿Qué son las figuritas brillantes (foil)?</h3>
     <p id="fa3">Son figuritas foil. El escudo de cada equipo (figurita 1) y las 20 figuritas FWC de introducción son foil. El efecto cambia de color según el estado.</p>
     <h3 id="fq4">¿Se guarda el progreso?</h3>
@@ -263,7 +263,7 @@ const TR = {
     leg:["■ Tengo ✓","■ Repetida ★","■ Me falta","— toca para cambiar estado"],
     faqbtn:"ⓘ Cómo usar este rastreador ▾",
     fqs:["¿Qué es esto?","¿Cómo marco una figurita?","¿Qué son las figuritas brillantes (foil)?","¿Se guarda el progreso?","¿Cómo paso mi progreso a otro dispositivo?"],
-    fas:["Rastreador para el álbum oficial Panini Copa del Mundo FIFA 2026. 48 equipos (figuritas 1–20) + 20 figuritas foil FWC + 12 bonus Coca‑Cola = <strong>994 figuritas en total</strong>.","Toca cualquier casilla para ciclar: <span class='key'>vacía</span> → <span class='key' style='color:#00c853'>✓ tengo</span> → <span class='key' style='color:#d4af37'>★ repetida</span> → <span class='key'>vacía</span>. Se guarda automáticamente.","Figuritas foil: escudo del equipo (figurita 1) + 20 figuritas FWC de introducción. El efecto cambia de color según el estado (azul→plata→oro).","Sí — guardado en <strong>localStorage</strong> del navegador en este dispositivo y navegador.","Haz clic en <span class='key'>↓ Exportar progreso</span>. Se descarga un nuevo archivo HTML con todos tus datos incluidos."],
+    fas:["Rastreador para el álbum oficial Panini Copa del Mundo FIFA 2026. 48 equipos (figuritas 1–20) + 20 figuritas foil FWC + 12 bonus Coca‑Cola = <strong>994 figuritas en total</strong>.","Toca cualquier casilla para ciclar: <span class='key'>vacía</span> → <span class='key' style='color:#3bb666'>✓ tengo</span> → <span class='key' style='color:#d4af37'>★ repetida</span> → <span class='key'>vacía</span>. Se guarda automáticamente.","Figuritas foil: escudo del equipo (figurita 1) + 20 figuritas FWC de introducción. El efecto cambia de color según el estado (azul→plata→oro).","Sí — guardado en <strong>localStorage</strong> del navegador en este dispositivo y navegador.","Haz clic en <span class='key'>↓ Exportar progreso</span>. Se descarga un nuevo archivo HTML con todos tus datos incluidos."],
     note:"* El listado de equipos sigue el álbum oficial Panini. Los números son relativos a cada sección (1–20 por equipo).",
     cnt:(o,d,m)=>`<span class='count-owned'>${o}✓</span> <span class='count-dup'>${d}★</span> <span class='count-miss'>${m}⬜</span>`
   },
@@ -276,7 +276,7 @@ const TR = {
     leg:["■ Owned ✓","■ Duplicate ★","■ Missing","— click to cycle state"],
     faqbtn:"ⓘ How to use this tracker ▾",
     fqs:["What is this?","How do I tick a sticker?","What are the shimmering foil stickers?","Will my ticks be saved?","How do I move my progress to another device?"],
-    fas:["A tracker for the official Panini FIFA World Cup 2026 album. 48 teams (stickers 1–20 each) + 20 FWC intro foil stickers + 14 Coca-Cola bonus stickers = <strong>994 stickers total</strong>.","Click any box to cycle: <span class='key'>empty</span> → <span class='key' style='color:#00c853'>✓ owned</span> → <span class='key' style='color:#d4af37'>★ duplicate</span> → <span class='key'>empty</span>. Saves automatically.","Foil stickers: team badge (sticker 1) + all 20 FWC intro stickers. The shimmer changes colour with state (blue→silver→gold).","Yes — stored in browser <strong>localStorage</strong> on this device and browser.","Click <span class='key'>↓ Export Progress</span>. Downloads a new copy of the HTML file with your stickers baked in."],
+    fas:["A tracker for the official Panini FIFA World Cup 2026 album. 48 teams (stickers 1–20 each) + 20 FWC intro foil stickers + 14 Coca-Cola bonus stickers = <strong>994 stickers total</strong>.","Click any box to cycle: <span class='key'>empty</span> → <span class='key' style='color:#3bb666'>✓ owned</span> → <span class='key' style='color:#d4af37'>★ duplicate</span> → <span class='key'>empty</span>. Saves automatically.","Foil stickers: team badge (sticker 1) + all 20 FWC intro stickers. The shimmer changes colour with state (blue→silver→gold).","Yes — stored in browser <strong>localStorage</strong> on this device and browser.","Click <span class='key'>↓ Export Progress</span>. Downloads a new copy of the HTML file with your stickers baked in."],
     note:"* Team list follows the official Panini album. Sticker numbers are per-section (1–20 per team).",
     cnt:(o,d,m)=>`<span class='count-owned'>${o}✓</span> <span class='count-dup'>${d}★</span> <span class='count-miss'>${m}⬜</span>`
   }
