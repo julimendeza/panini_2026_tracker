@@ -66,4 +66,4 @@ Argentina 🇦🇷 · Algeria 🇩🇿 · Austria 🇦🇹 · Australia 🇦🇺
 
 ---
 
-*Made with Claude · Anthropic · 2025*
+*Made with Claude · Anthropic · 2026*
