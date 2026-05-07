@@ -107,6 +107,26 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 
 @media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.grid{grid-template-columns:1fr}}
+
+/* View banner */
+#view-banner{background:#1a3d28;border:1px solid #2d7040;border-radius:8px;padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+#vb-label{color:#ddf4e8;font-size:.95rem}
+#vb-label strong{color:#ffd700}
+.vb-btn{background:#0c3520;color:#ffd700;border:1px solid #2d7040;border-radius:20px;padding:5px 14px;font-size:.82rem;cursor:pointer;transition:all .2s}
+.vb-btn:hover{background:#ffd700;color:#0c3520}
+/* Trade panel */
+#trade-panel{background:#122e1e;border:1px solid #1e4a2e;border-radius:10px;padding:14px 18px;margin-bottom:20px}
+.trade-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:600px){.trade-grid{grid-template-columns:1fr}}
+.trade-col h3{color:#ffd700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.trade-badge{background:rgba(255,215,0,.15);color:#ffd700;border-radius:99px;padding:1px 8px;font-size:.75rem;font-weight:bold}
+.trade-row{font-size:.82rem;color:#9ecfb0;margin:4px 0;line-height:1.5;display:flex;align-items:center;gap:5px}
+.trade-row img{border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.trade-nums{color:#ddf4e8;font-weight:500}
+.no-trades{text-align:center;color:#5a8870;font-size:.85rem;padding:4px 0}
+/* Toast */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(8px);background:#ffd700;color:#0a2410;padding:10px 24px;border-radius:99px;font-weight:700;font-size:.88rem;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9999}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -117,10 +137,16 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
 <div id="total-bar-wrap"><div id="total-bar" style="width:0%"></div></div>
 <p id="legend"><span id="leg-owned" style="color:#00c853">■ Tengo ✓</span><span id="leg-dup" style="color:#d4af37">■ Repetida ★</span><span id="leg-miss" style="color:#4a5a70">■ Me falta</span><span id="leg-tap" style="color:#556">— toca para cambiar estado</span></p>
 
-<div class="lang-bar">
-  <button class="lang-btn active" id="btn-es" onclick="setLang('es')">🇪🇸 Español</button>
-  <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 English</button>
+<div class="lang-bar" id="lang-bar">
+  <button class="lang-btn active" id="btn-es" onclick="setLang('es')"><img src="https://flagcdn.com/16x12/es.png" alt="ES" style="vertical-align:middle;margin-right:4px">Español</button>
+  <button class="lang-btn" id="btn-en" onclick="setLang('en')"><img src="https://flagcdn.com/16x12/gb.png" alt="EN" style="vertical-align:middle;margin-right:4px">English</button>
 </div>
+
+<div id="view-banner" style="display:none">
+  <span id="vb-label">👁 <strong id="vb-name">—</strong></span>
+  <button class="vb-btn" id="vb-back" onclick="exitViewMode()">← Mi colección</button>
+</div>
+<div id="trade-panel" style="display:none"></div>
 
 <div class="faq-wrap">
   <button class="faq-toggle" id="faq-toggle" onclick="this.nextElementSibling.classList.toggle('open')">ⓘ Cómo usar este rastreador ▾</button>
@@ -143,6 +169,7 @@ h1{text-align:center;font-size:1.8rem;color:#ffd700;text-shadow:0 0 20px rgba(25
   <button id="fb-inc" onclick="filterTeams('incomplete',this)">Incompletos</button>
   <button id="fb-comp" onclick="filterTeams('complete',this)">Completos</button>
   <button id="fb-none" onclick="filterTeams('none',this)">Sin empezar</button>
+  <button id="fb-share" onclick="shareCollection()">📤 Compartir</button>
   <button class="btn-export" id="fb-exp" onclick="exportProgress()">↓ Exportar progreso</button>
   <button class="btn-reset" id="fb-rst" onclick="resetAll()">Reiniciar todo</button>
 </div>
@@ -164,54 +191,54 @@ const COKE_OWNED = {};
 
 // __TEAMS_START__
 const TEAMS = [
-  {id:"mexico",en:"Mexico",es:"México",flag:"🇲🇽",owned:[],code:"mx"},
-  {id:"south_africa",en:"South Africa",es:"Sudáfrica",flag:"🇿🇦",owned:[],code:"za"},
-  {id:"south_korea",en:"South Korea",es:"Corea del Sur",flag:"🇰🇷",owned:[],code:"kr"},
-  {id:"czechia",en:"Czechia",es:"Chequia",flag:"🇨🇿",owned:[],code:"cz"},
-  {id:"canada",en:"Canada",es:"Canadá",flag:"🇨🇦",owned:[],code:"ca"},
-  {id:"bosnia",en:"Bosnia and Herzegovina",es:"Bosnia y Herzegovina",flag:"🇧🇦",owned:[],code:"ba"},
-  {id:"qatar",en:"Qatar",es:"Catar",flag:"🇶🇦",owned:[],code:"qa"},
-  {id:"switzerland",en:"Switzerland",es:"Suiza",flag:"🇨🇭",owned:[],code:"ch"},
-  {id:"brazil",en:"Brazil",es:"Brasil",flag:"🇧🇷",owned:[],code:"br"},
-  {id:"morocco",en:"Morocco",es:"Marruecos",flag:"🇲🇦",owned:[],code:"ma"},
-  {id:"haiti",en:"Haiti",es:"Haití",flag:"🇭🇹",owned:[],code:"ht"},
-  {id:"scotland",en:"Scotland",es:"Escocia",flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",owned:[],code:"gb-sct"},
-  {id:"usa",en:"USA",es:"Estados Unidos",flag:"🇺🇸",owned:[],code:"us"},
-  {id:"paraguay",en:"Paraguay",es:"Paraguay",flag:"🇵🇾",owned:[],code:"py"},
-  {id:"australia",en:"Australia",es:"Australia",flag:"🇦🇺",owned:[],code:"au"},
-  {id:"turkiye",en:"Türkiye",es:"Turquía",flag:"🇹🇷",owned:[],code:"tr"},
-  {id:"germany",en:"Germany",es:"Alemania",flag:"🇩🇪",owned:[],code:"de"},
-  {id:"curacao",en:"Curaçao",es:"Curazao",flag:"🇨🇼",owned:[],code:"cw"},
-  {id:"ivory_coast",en:"Ivory Coast",es:"Costa de Marfil",flag:"🇨🇮",owned:[],code:"ci"},
-  {id:"ecuador",en:"Ecuador",es:"Ecuador",flag:"🇪🇨",owned:[],code:"ec"},
-  {id:"netherlands",en:"Netherlands",es:"Países Bajos",flag:"🇳🇱",owned:[],code:"nl"},
-  {id:"japan",en:"Japan",es:"Japón",flag:"🇯🇵",owned:[],code:"jp"},
-  {id:"sweden",en:"Sweden",es:"Suecia",flag:"🇸🇪",owned:[],code:"se"},
-  {id:"tunisia",en:"Tunisia",es:"Túnez",flag:"🇹🇳",owned:[],code:"tn"},
-  {id:"belgium",en:"Belgium",es:"Bélgica",flag:"🇧🇪",owned:[],code:"be"},
-  {id:"egypt",en:"Egypt",es:"Egipto",flag:"🇪🇬",owned:[],code:"eg"},
-  {id:"iran",en:"Iran",es:"Irán",flag:"🇮🇷",owned:[],code:"ir"},
-  {id:"new_zealand",en:"New Zealand",es:"Nueva Zelanda",flag:"🇳🇿",owned:[],code:"nz"},
-  {id:"spain",en:"Spain",es:"España",flag:"🇪🇸",owned:[],code:"es"},
-  {id:"cape_verde",en:"Cape Verde",es:"Cabo Verde",flag:"🇨🇻",owned:[],code:"cv"},
-  {id:"saudi_arabia",en:"Saudi Arabia",es:"Arabia Saudita",flag:"🇸🇦",owned:[],code:"sa"},
-  {id:"uruguay",en:"Uruguay",es:"Uruguay",flag:"🇺🇾",owned:[],code:"uy"},
-  {id:"france",en:"France",es:"Francia",flag:"🇫🇷",owned:[],code:"fr"},
-  {id:"senegal",en:"Senegal",es:"Senegal",flag:"🇸🇳",owned:[],code:"sn"},
-  {id:"iraq",en:"Iraq",es:"Irak",flag:"🇮🇶",owned:[],code:"iq"},
-  {id:"norway",en:"Norway",es:"Noruega",flag:"🇳🇴",owned:[],code:"no"},
-  {id:"argentina",en:"Argentina",es:"Argentina",flag:"🇦🇷",owned:[],code:"ar"},
-  {id:"algeria",en:"Algeria",es:"Argelia",flag:"🇩🇿",owned:[],code:"dz"},
-  {id:"austria",en:"Austria",es:"Austria",flag:"🇦🇹",owned:[],code:"at"},
-  {id:"jordan",en:"Jordan",es:"Jordania",flag:"🇯🇴",owned:[],code:"jo"},
-  {id:"portugal",en:"Portugal",es:"Portugal",flag:"🇵🇹",owned:[],code:"pt"},
-  {id:"congo_dr",en:"Congo DR",es:"RD Congo",flag:"🇨🇩",owned:[],code:"cd"},
-  {id:"uzbekistan",en:"Uzbekistan",es:"Uzbekistán",flag:"🇺🇿",owned:[],code:"uz"},
-  {id:"colombia",en:"Colombia",es:"Colombia",flag:"🇨🇴",owned:[],code:"co"},
-  {id:"england",en:"England",es:"Inglaterra",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",owned:[],code:"gb-eng"},
-  {id:"croatia",en:"Croatia",es:"Croacia",flag:"🇭🇷",owned:[],code:"hr"},
-  {id:"ghana",en:"Ghana",es:"Ghana",flag:"🇬🇭",owned:[],code:"gh"},
-  {id:"panama",en:"Panama",es:"Panamá",flag:"🇵🇦",owned:[],code:"pa"}
+  {id:"mexico",en:"Mexico",es:"México",owned:[],code:"mx"},
+  {id:"south_africa",en:"South Africa",es:"Sudáfrica",owned:[],code:"za"},
+  {id:"south_korea",en:"South Korea",es:"Corea del Sur",owned:[],code:"kr"},
+  {id:"czechia",en:"Czechia",es:"Chequia",owned:[],code:"cz"},
+  {id:"canada",en:"Canada",es:"Canadá",owned:[],code:"ca"},
+  {id:"bosnia",en:"Bosnia and Herzegovina",es:"Bosnia y Herzegovina",owned:[],code:"ba"},
+  {id:"qatar",en:"Qatar",es:"Catar",owned:[],code:"qa"},
+  {id:"switzerland",en:"Switzerland",es:"Suiza",owned:[],code:"ch"},
+  {id:"brazil",en:"Brazil",es:"Brasil",owned:[],code:"br"},
+  {id:"morocco",en:"Morocco",es:"Marruecos",owned:[],code:"ma"},
+  {id:"haiti",en:"Haiti",es:"Haití",owned:[],code:"ht"},
+  {id:"scotland",en:"Scotland",es:"Escocia",owned:[],code:"gb-sct"},
+  {id:"usa",en:"USA",es:"Estados Unidos",owned:[],code:"us"},
+  {id:"paraguay",en:"Paraguay",es:"Paraguay",owned:[],code:"py"},
+  {id:"australia",en:"Australia",es:"Australia",owned:[],code:"au"},
+  {id:"turkiye",en:"Türkiye",es:"Turquía",owned:[],code:"tr"},
+  {id:"germany",en:"Germany",es:"Alemania",owned:[],code:"de"},
+  {id:"curacao",en:"Curaçao",es:"Curazao",owned:[],code:"cw"},
+  {id:"ivory_coast",en:"Ivory Coast",es:"Costa de Marfil",owned:[],code:"ci"},
+  {id:"ecuador",en:"Ecuador",es:"Ecuador",owned:[],code:"ec"},
+  {id:"netherlands",en:"Netherlands",es:"Países Bajos",owned:[],code:"nl"},
+  {id:"japan",en:"Japan",es:"Japón",owned:[],code:"jp"},
+  {id:"sweden",en:"Sweden",es:"Suecia",owned:[],code:"se"},
+  {id:"tunisia",en:"Tunisia",es:"Túnez",owned:[],code:"tn"},
+  {id:"belgium",en:"Belgium",es:"Bélgica",owned:[],code:"be"},
+  {id:"egypt",en:"Egypt",es:"Egipto",owned:[],code:"eg"},
+  {id:"iran",en:"Iran",es:"Irán",owned:[],code:"ir"},
+  {id:"new_zealand",en:"New Zealand",es:"Nueva Zelanda",owned:[],code:"nz"},
+  {id:"spain",en:"Spain",es:"España",owned:[],code:"es"},
+  {id:"cape_verde",en:"Cape Verde",es:"Cabo Verde",owned:[],code:"cv"},
+  {id:"saudi_arabia",en:"Saudi Arabia",es:"Arabia Saudita",owned:[],code:"sa"},
+  {id:"uruguay",en:"Uruguay",es:"Uruguay",owned:[],code:"uy"},
+  {id:"france",en:"France",es:"Francia",owned:[],code:"fr"},
+  {id:"senegal",en:"Senegal",es:"Senegal",owned:[],code:"sn"},
+  {id:"iraq",en:"Iraq",es:"Irak",owned:[],code:"iq"},
+  {id:"norway",en:"Norway",es:"Noruega",owned:[],code:"no"},
+  {id:"argentina",en:"Argentina",es:"Argentina",owned:[],code:"ar"},
+  {id:"algeria",en:"Algeria",es:"Argelia",owned:[],code:"dz"},
+  {id:"austria",en:"Austria",es:"Austria",owned:[],code:"at"},
+  {id:"jordan",en:"Jordan",es:"Jordania",owned:[],code:"jo"},
+  {id:"portugal",en:"Portugal",es:"Portugal",owned:[],code:"pt"},
+  {id:"congo_dr",en:"Congo DR",es:"RD Congo",owned:[],code:"cd"},
+  {id:"uzbekistan",en:"Uzbekistan",es:"Uzbekistán",owned:[],code:"uz"},
+  {id:"colombia",en:"Colombia",es:"Colombia",owned:[],code:"co"},
+  {id:"england",en:"England",es:"Inglaterra",owned:[],code:"gb-eng"},
+  {id:"croatia",en:"Croatia",es:"Croacia",owned:[],code:"hr"},
+  {id:"ghana",en:"Ghana",es:"Ghana",owned:[],code:"gh"},
+  {id:"panama",en:"Panama",es:"Panamá",owned:[],code:"pa"}
 ];
 // __TEAMS_END__
 
@@ -257,12 +284,12 @@ const TR = {
 
 function t(){return TR[LANG];}
 
-function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch{return{};}}
-function saveState(s){localStorage.setItem(STORAGE_KEY,JSON.stringify(s));}
+function loadState(){if(VIEW_MODE&&VIEW_STATE!==null)return JSON.parse(JSON.stringify(VIEW_STATE));try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch{return{};}}
+function saveState(s){if(VIEW_MODE)return;localStorage.setItem(STORAGE_KEY,JSON.stringify(s));}
 
 function getSt(s,key,n){return(s[key]&&s[key][n]!=null)?s[key][n]:0;}
 
-function cycleSticker(el){
+function cycleSticker(el){if(VIEW_MODE)return;
   const key=el.dataset.key, n=el.dataset.n;
   const s=loadState();
   if(!s[key])s[key]={};
@@ -389,7 +416,7 @@ function filterTeams(mode,btn){
   });
 }
 
-function resetAll(){
+function resetAll(){if(VIEW_MODE)return;
   if(!confirm(t().confirm))return;
   _resetting=true;localStorage.removeItem(STORAGE_KEY);buildCards();_resetting=false;
 }
@@ -420,7 +447,7 @@ function setLang(lang){
   buildCards();
 }
 
-function exportProgress(){
+function exportProgress(){if(VIEW_MODE)return;
   const s=loadState();
   const introObj=s[INTRO_KEY]||{};
   const cokeObj=s[COKE_KEY]||{};
@@ -440,8 +467,145 @@ function exportProgress(){
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Panini_FWC2026_Tracker.html';a.click();URL.revokeObjectURL(a.href);
 }
 
+
+// ── Sticker order (deterministic, for compact URL encoding) ─────────────────
+const STICKER_ORDER=(()=>{
+  const o=[];
+  INTRO_STICKERS.forEach(id=>o.push([INTRO_KEY,id]));
+  COKE_STICKERS.forEach(id=>o.push([COKE_KEY,id]));
+  TEAMS.forEach(tm=>{for(let i=1;i<=STICKERS_PER_TEAM;i++)o.push([tm.id,i]);});
+  return o;
+})();
+
+// ── Compact encode: 2 bits per sticker (0=miss,1=own,2=dup) → base64 ────────
+function encodeStateCompact(s){
+  const n=STICKER_ORDER.length;
+  const bytes=new Uint8Array(Math.ceil(n/4));
+  for(let i=0;i<n;i++){
+    const[key,id]=STICKER_ORDER[i];
+    const val=(s[key]&&s[key][id]!=null)?s[key][id]:0;
+    bytes[Math.floor(i/4)]|=(val&3)<<(6-(i%4)*2);
+  }
+  return btoa(String.fromCharCode(...bytes));
+}
+function decodeStateCompact(enc){
+  const bytes=Uint8Array.from(atob(enc),c=>c.charCodeAt(0));
+  const s={};
+  for(let i=0;i<STICKER_ORDER.length;i++){
+    const[key,id]=STICKER_ORDER[i];
+    const val=(bytes[Math.floor(i/4)]>>(6-(i%4)*2))&3;
+    if(val>0){if(!s[key])s[key]={};s[key][id]=val;}
+  }
+  return s;
+}
+
+// ── View mode state ──────────────────────────────────────────────────────────
+let VIEW_MODE=false,VIEW_STATE=null,VIEW_NAME='';
+
+// ── Share ────────────────────────────────────────────────────────────────────
+function shareCollection(){
+  const t=TR[LANG];
+  const name=(prompt(t.sharePrompt,'')||'').trim();
+  if(!name)return;
+  const encoded=encodeStateCompact(loadState());
+  const payload=encodeURIComponent(name)+'.'+encoded;
+  const url=location.origin+location.pathname+'?share='+payload;
+  navigator.clipboard.writeText(url)
+    .then(()=>showToast(t.shareCopied))
+    .catch(()=>prompt(t.shareFallback,url));
+}
+
+// ── Enter view mode ──────────────────────────────────────────────────────────
+function applyViewMode(){
+  const t=TR[LANG];
+  document.getElementById('lang-bar').style.display='none';
+  document.getElementById('fb-share').style.display='none';
+  document.getElementById('fb-exp').style.display='none';
+  document.getElementById('fb-rst').style.display='none';
+  const vb=document.getElementById('view-banner');
+  vb.style.display='flex';
+  document.getElementById('vb-label').innerHTML=t.viewBanner(VIEW_NAME);
+  document.getElementById('vb-back').textContent=t.viewBack;
+}
+
+// ── Exit view mode ───────────────────────────────────────────────────────────
+function exitViewMode(){
+  VIEW_MODE=false;VIEW_STATE=null;VIEW_NAME='';
+  history.replaceState(null,'',location.pathname);
+  document.getElementById('lang-bar').style.display='';
+  document.getElementById('fb-share').style.display='';
+  document.getElementById('fb-exp').style.display='';
+  document.getElementById('fb-rst').style.display='';
+  document.getElementById('view-banner').style.display='none';
+  document.getElementById('trade-panel').style.display='none';
+  buildCards();
+}
+
+// ── Trade analysis ───────────────────────────────────────────────────────────
+function buildTrades(){
+  const t=TR[LANG];
+  const mine=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+  const theirs=VIEW_STATE;
+  const sections=[
+    {key:INTRO_KEY,ids:INTRO_STICKERS,name:t.intro,code:null},
+    {key:COKE_KEY,ids:COKE_STICKERS,name:'Coca-Cola',code:null},
+    ...TEAMS.map(tm=>({key:tm.id,ids:Array.from({length:STICKERS_PER_TEAM},(_,i)=>i+1),name:tm[LANG],code:tm.code}))
+  ];
+  let theyGive=[],youGive=[];
+  for(const sec of sections){
+    const tg=[],yg=[];
+    for(const id of sec.ids){
+      const m=(mine[sec.key]&&mine[sec.key][id]!=null)?mine[sec.key][id]:0;
+      const h=(theirs[sec.key]&&theirs[sec.key][id]!=null)?theirs[sec.key][id]:0;
+      if(h===2&&m===0)tg.push(id);
+      if(m===2&&h===0)yg.push(id);
+    }
+    if(tg.length)theyGive.push({sec,ids:tg});
+    if(yg.length)youGive.push({sec,ids:yg});
+  }
+  const nTG=theyGive.reduce((s,x)=>s+x.ids.length,0);
+  const nYG=youGive.reduce((s,x)=>s+x.ids.length,0);
+  const panel=document.getElementById('trade-panel');
+  if(!nTG&&!nYG){panel.innerHTML=`<p class="no-trades">${t.noTrades}</p>`;panel.style.display='';return;}
+  const colHTML=(items,label)=>{
+    if(!items.length)return'';
+    let h=`<div class="trade-col"><h3>${label} <span class="trade-badge">${items.reduce((s,x)=>s+x.ids.length,0)}</span></h3>`;
+    for(const{sec,ids}of items){
+      const flag=sec.code?`<img src="https://flagcdn.com/16x12/${sec.code}.png" alt="">`:' ';
+      h+=`<div class="trade-row">${flag}<span>${sec.name}:</span><span class="trade-nums">${ids.join(', ')}</span></div>`;
+    }
+    return h+'</div>';
+  };
+  panel.innerHTML=`<div class="trade-grid">${colHTML(theyGive,t.theyGive(VIEW_NAME))}${colHTML(youGive,t.youGive(VIEW_NAME))}</div>`;
+  panel.style.display='';
+}
+
+// ── Check URL on load ────────────────────────────────────────────────────────
+function checkShareParam(){
+  const params=new URLSearchParams(location.search);
+  const share=params.get('share');
+  if(!share)return;
+  try{
+    const dot=share.indexOf('.');
+    VIEW_NAME=decodeURIComponent(share.slice(0,dot));
+    VIEW_STATE=decodeStateCompact(share.slice(dot+1));
+    VIEW_MODE=true;
+    applyViewMode();
+    setTimeout(buildTrades,0);
+  }catch(e){console.error('Invalid share link',e);}
+}
+
+// ── Toast ────────────────────────────────────────────────────────────────────
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2500);
+}
+
 const PAGE_TEMPLATE=document.documentElement.outerHTML;
+checkShareParam();
 buildCards();
 </script>
+<div id="toast"></div>
 </body>
 </html>
